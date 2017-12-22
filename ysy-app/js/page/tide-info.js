@@ -1,0 +1,381 @@
+function handleTideHarborsRes(data) {
+    var resDate = [];
+    if (!!data && data.datas.length > 0) {
+        data.datas.forEach(function (value) {
+            var item = {value: '', text: ''};
+            item.value = value.tideHarborCode;
+            item.text = value.tideHarborName;
+            resDate.push(item);
+        });
+    }
+    else {
+        mui.toast('暂无数据返回，请稍后重试');
+    }
+    return resDate;
+}
+
+function handleTideListRes(data) {
+    var resDate = [];
+    if (!!data && data.pageDatas.list.length > 0) {
+        resDate = data.pageDatas.list;
+    }
+    else {
+        mui.toast('暂无数据返回，请稍后重试');
+    }
+    return resDate;
+}
+
+function initChart(Tidedatas) {
+    var getOption = function (chartType) {
+        var chartOption = {
+            legend: {
+                data: ['潮高']
+            },
+            grid: {
+                x: 35,
+                x2: 10,
+                y: 30,
+                y2: 25
+            },
+            toolbox: {
+                show: false,
+                feature: {
+                    mark: {
+                        show: true
+                    },
+                    dataView: {
+                        show: true,
+                        readOnly: false
+                    },
+                    magicType: {
+                        show: true,
+                        type: ['line']
+                    },
+                    restore: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            calculable: false,
+            xAxis: [{
+                type: 'category',
+                data: ['0点', '1点', '2点', '3点', '4点', '5点', '6点', '7点', '8点', '9点', '10点', '11点', '12点', '13点', '14点', '15点', '16点', '17点', '18点', '19点', '20点', '21点', '22点', '23点']
+            }],
+            yAxis: [{
+                type: 'value',
+                splitArea: {
+                    show: true
+                }
+            }],
+            series: [{
+                name: '潮高',
+                type: chartType,
+                data: Tidedatas
+            }]
+        };
+        return chartOption;
+    };
+    var byId = function (id) {
+        return document.getElementById(id);
+    };
+    var lineChart = echarts.init(byId('lineChart'));
+    lineChart.setOption(getOption('line'));
+}
+
+function initDate1($, ele, opt, callback) {
+    ele.each(function (i, btn) {
+        btn.addEventListener('tap', function () {
+            var _self = this;
+            if (_self.picker) {
+                _self.picker.show(function (rs) {
+                    console.log('选择结果: ' + rs.text);
+                    _self.querySelector('.search-date').value = rs.text;
+                    callback();
+                    _self.picker.dispose();
+                    _self.picker = null;
+                });
+            } else {
+                var optionsJson = opt || '{}';
+                var options = JSON.parse(optionsJson);
+                var id = this.getAttribute('id');
+                _self.picker = new $.DtPicker(options);
+                _self.picker.show(function (rs) {
+                    console.log('选择结果: ' + rs.text);
+                    _self.querySelector('.search-date').value = rs.text;
+                    callback();
+                    _self.picker.dispose();
+                    _self.picker = null;
+                });
+            }
+        }, false);
+    });
+}
+
+function initPicker1($, ele, opt, callback) {
+    var userPicker = new $.PopPicker();
+    userPicker.setData(opt);
+    ele.addEventListener('tap', function (event) {
+        userPicker.show(function (items) {
+            ele.value = items[0].text;
+            ele.setAttribute('data-value', items[0].value);
+            callback();
+            //返回 false 可以阻止选择框的关闭
+            //return false;
+        });
+    }, false);
+    return userPicker;
+}
+
+var userPicker = '';
+var viewApi = mui('#app').view({
+    defaultPage: '#list'
+});
+
+var vueData = new Vue({
+    el: '#list',
+    data: {
+        pages: [],
+        pagesize: 10,
+        totalCount: 0,
+        currPage: 1,
+        TideHarbors: [],
+        now: dateUtils.now('yyyy-MM-dd'),
+        TideList: [],
+        TideDetailList: [],
+        duty: [],
+        queryInput: {queryTideDate: dateUtils.now('yyyy-MM-dd'), showTidePlace: ''}
+    },
+    watch:{
+
+    },
+    updated: function (e) {
+        if (vueData && vueData.totalCount > 0) {
+            if (!!mui('#pullrefresh').pullToRefresh()) {
+                mui('#pullrefresh').pullToRefresh().setStopped(false);
+                if (vueData.currPage * vueData.pagesize >= vueData.totalCount) {
+                    mui('#pullrefresh').pullToRefresh().endPullUpToRefresh(true);
+                    mui('.mui-pull-bottom-tips')[0].classList.add('mui-hidden');
+                }
+                else {
+                    mui('#pullrefresh').pullToRefresh().refresh(true);
+                    mui('#pullrefresh').pullToRefresh().endPullUpToRefresh(false);
+                }
+            }
+        }
+        else if (vueData && vueData.totalCount <= 0) {
+            if (!!mui('#pullrefresh').pullToRefresh()) {
+                mui('#pullrefresh').pullToRefresh().endPullUpToRefresh(true);
+                mui('.mui-pull-bottom-tips')[0].classList.add('mui-hidden');
+            }
+        }
+        mui("#list .mui-scroll-wrapper .mui-scroll").on("tap", ".my-card.mui-table-view-cell", function (e) {
+            //获取自定义的属性值
+            var id = this.getAttribute("data-id");
+            vueData.TideList.forEach(function (v) {
+                if (v.resourceid == id) {
+                    vueDetail.TideDetail = v;
+                    vueDetail.TideDetail.time = vueData.queryInput.queryTideDate
+                }
+            });
+            viewApi.go('#detail');
+        });
+    },
+    mounted:function(e){
+        //this.showLoading = this.TideDetailList.length <= 0;
+        //console.log('=this.showLoading=' + this.showLoading);
+    },
+    methods: {
+        getTideHarbors:function() {
+            try {
+                var TideHarborsOpt = {
+                    storeKey: 'TideHarborsList',
+                    apiUrl: '/api/query/szgTideHarborQueryAll',
+                    reqType: 'GET',
+                    reqData: {}
+                };
+                //获取潮汐港信息
+                getAjaxData(TideHarborsOpt).then(function (data) {
+                    console.log('=data=' + data);
+                    vueData.TideHarbors = handleTideHarborsRes(data);
+                    if (!!userPicker)
+                        userPicker.setData(vueData.TideHarbors);
+                }).catch(function (err) {
+                    mui.toast(err);
+                });
+            }
+            catch (ex) {
+                mui.toast(ex);
+            }
+        },
+        getTideInfoListData:function(loadstaus) {
+            try{
+                var queryTideDate = !!mui('#queryTideDate')[0].value ? (mui('#queryTideDate')[0].value) : '';
+                var showTidePlace = !!mui('#showTidePlacePicker')[0].getAttribute('data-value') ? mui('#showTidePlacePicker')[0].getAttribute('data-value') : '';
+                if (loadstaus == 'down' || (vueData.queryInput.queryTideDate != queryTideDate || vueData.queryInput.showTidePlace != showTidePlace)) {
+                    vueData.queryInput.queryTideDate = queryTideDate;
+                    vueData.queryInput.showTidePlace = showTidePlace;
+                    vueData.TideList = [];
+                    vueData.pages = [];
+                    vueData.currPage = 1;
+                }
+                //获取列表信息
+                var queryTideList = {
+                    storeKey: STOREKEY_TIDE,
+                    apiUrl: '/api/query/szgTideInfolist',
+                    reqType: 'POST',
+                    reqData: {
+                        "tideDate": queryTideDate,
+                        "tideHarborCode": showTidePlace,
+                        "pageIndex": vueData.currPage,
+                        "pageSize": vueData.pagesize
+                    }
+                };
+                queryTideList.reqData.pageIndex = loadstaus == 'up' ? ++queryTideList.reqData.pageIndex : 1;
+                getAjaxData(queryTideList).then(function (data) {
+                    if (vueData.pages.indexOf(data.pageDatas.currPage) < 0) {
+                        vueData.pages.push(data.pageDatas.currPage);
+                        vueData.totalCount = data.pageDatas.totalCount;
+                        vueData.currPage = data.pageDatas.currPage;
+                        vueData.TideList = vueData.TideList.concat(handleTideListRes(data));
+                    }
+                    mui('#pullrefresh').pullToRefresh().endPullDownToRefresh(true);
+                }).catch(function (err) {
+                    mui('#pullrefresh').pullToRefresh().endPullDownToRefresh(true);
+                });
+            }
+            catch (ex){
+              mui.toast(ex);
+            }
+        },
+    }
+});
+var vueDetail = new Vue({
+    el: '#detail',
+    data: {
+        TideDetail: {},
+        showChart: true
+    }
+});
+try {
+    (function ($, doc) {
+        mui.init({
+            swipeBack: false,
+            gestureConfig: {
+                doubletap: true
+            }
+        });
+        var deceleration = mui.os.ios ? 0.003 : 0.0009;
+        mui('.mui-scroll-wrapper').scroll({
+            bounce: false,
+            indicators: true,
+            deceleration: deceleration
+        });
+        var view = viewApi.view;
+        var oldBack = $.back;
+        $.back = function () {
+            if (viewApi.canBack()) {
+                viewApi.back();
+            } else {
+                oldBack();
+            }
+        };
+        view.addEventListener('pageBeforeShow', function (e) {
+            initChart([
+                vueDetail.TideDetail.highTide0,
+                vueDetail.TideDetail.highTide1,
+                vueDetail.TideDetail.highTide2,
+                vueDetail.TideDetail.highTide3,
+                vueDetail.TideDetail.highTide4,
+                vueDetail.TideDetail.highTide5,
+                vueDetail.TideDetail.highTide6,
+                vueDetail.TideDetail.highTide7,
+                vueDetail.TideDetail.highTide8,
+                vueDetail.TideDetail.highTide9,
+                vueDetail.TideDetail.highTide10,
+                vueDetail.TideDetail.highTide11,
+                vueDetail.TideDetail.highTide12,
+                vueDetail.TideDetail.highTide13,
+                vueDetail.TideDetail.highTide14,
+                vueDetail.TideDetail.highTide15,
+                vueDetail.TideDetail.highTide16,
+                vueDetail.TideDetail.highTide17,
+                vueDetail.TideDetail.highTide18,
+                vueDetail.TideDetail.highTide19,
+                vueDetail.TideDetail.highTide20,
+                vueDetail.TideDetail.highTide21,
+                vueDetail.TideDetail.highTide22,
+                vueDetail.TideDetail.highTide23]);
+        });
+        view.addEventListener('pageShow', function (e) {
+            //console.log(e.detail.page.id + ' show');
+        });
+        view.addEventListener('pageBeforeBack', function (e) {
+            //console.log(e.detail.page.id + ' beforeBack');
+            if (e.detail.page.id == 'detail') {
+                console.log(e.detail.page.id + ' show');
+                vueDetail.showChart = true;
+                mui('#scroll2').scroll().scrollTo(0, 0, 300);
+            }
+        });
+        view.addEventListener('pageBack', function (e) {
+            //console.log(e.detail.page.id + ' back');
+
+        });
+
+        $.ready(function () {
+            var dateOption = '{"type":"date","beginYear":2016,"endYear":2020}';
+            var TideHarborsOption = vueData.TideHarbors;
+            //循环初始化所有下拉刷新，上拉加载。
+            $.each(document.querySelectorAll('#pullrefresh'), function (index, pullRefreshEl) {
+                $(pullRefreshEl).pullToRefresh({
+                    down: {
+                        auto: true,//可选,默认false.首次加载自动上拉刷新一次
+                        callback: function () {
+                            var self = this;
+                            setTimeout(function () {
+                                console.log('我在刷新了');
+                                ///获取班次信息
+                                vueData.getTideInfoListData('down');
+                            }, 1000);
+                        }
+                    },
+                    up: {
+                        callback: function () {
+                            var self = this;
+                            setTimeout(function () {
+                                vueData.getTideInfoListData('up');
+                                self.endPullUpToRefresh(false);
+                            }, 1000);
+                        }
+                    }
+                });
+            });
+            initDate1(mui, $('.input-date1'), dateOption, function () {
+            });
+            userPicker = initPicker1(mui, document.getElementById('showTidePlacePicker'), TideHarborsOption, function () {
+            });
+            vueData.getTideHarbors();
+            mui('#pullrefresh').pullToRefresh().setStopped(true);//隐藏mui下拉刷新提示
+        });
+        $(".mui-navbar-inner").on("tap", ".search-tide", function (e) {
+            var queryTideDate = !!mui('#queryTideDate')[0].value ? (mui('#queryTideDate')[0].value) : '';
+            var showTidePlace = !!mui('#showTidePlacePicker')[0].value ? mui('#showTidePlacePicker')[0].value : '';
+            if (queryTideDate == '' && showTidePlace == '') {
+                mui.alert('查询条件都不能为空');
+                return;
+            }
+            mui('#pullrefresh').pullToRefresh().pullDownLoading();
+        });
+        scrollToTop({domSelector: '#title1', scrollDomSelector: '#scroll1'});
+        scrollToTop({domSelector: '#title2', scrollDomSelector: '#scroll2'});
+    })(mui, document);
+}
+catch (ex) {
+    mui.toast(ex);
+}

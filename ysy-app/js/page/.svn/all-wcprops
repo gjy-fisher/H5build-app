@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/portal/!svn/ver/40832/trunk/mobile/szg/js/page
+END
+pilotage.js
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/pilotage.js
+END
+schedule-plan.js
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/schedule-plan.js
+END
+tab-task.js
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/portal/!svn/ver/40957/trunk/mobile/szg/js/page/tab-task.js
+END
+login.js
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/login.js
+END
+ship-scale.js
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/ship-scale.js
+END
+mine.js
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/portal/!svn/ver/40906/trunk/mobile/szg/js/page/mine.js
+END
+ship-info.js
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/ship-info.js
+END
+berth-info.js
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/berth-info.js
+END
+tide-info.js
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/tide-info.js
+END
+exception.js
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/portal/!svn/ver/40846/trunk/mobile/szg/js/page/exception.js
+END
+workload.js
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/portal/!svn/ver/40954/trunk/mobile/szg/js/page/workload.js
+END
+task-form.js
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/portal/!svn/ver/40943/trunk/mobile/szg/js/page/task-form.js
+END

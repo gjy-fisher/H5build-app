@@ -1,0 +1,379 @@
+@charset "UTF-8";
+html,
+body {
+    background-color: #efeff4;
+}
+.mui-bar~.mui-content .mui-fullscreen {
+	top: 44px;
+	height: auto;
+}
+
+/*----- 通用  ------(start)*/
+.top44{
+	top:44px;
+}
+.top15{
+	top:15px;
+}
+.center {
+    right: 5px;
+    left: 5px;
+    display: inline-block;
+    overflow: hidden;
+    width: auto;
+    margin: 0;
+    text-overflow: ellipsis;
+    /*font-size: 18px;
+    font-weight: 500;*/
+    position: absolute;
+    padding: 0;
+    text-align: center;
+    white-space: nowrap;
+    color: #999;
+}
+.bg-circle{
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding:0 5px;
+    /*margin: 0 2px;*/
+    border-radius:50%;
+    font-size: 12px;
+}
+
+/*----- 通用  ------(end)*/
+
+/*----- 单页面  ------(start)*/
+.mui-views,
+.mui-view,
+.mui-pages,
+.mui-page,
+.mui-page-content {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #efeff4;
+}
+.mui-pages {
+	top: 46px;
+	height: auto;
+}
+.mui-scroll-wrapper,
+.mui-scroll {
+	background-color: #efeff4;
+}
+.mui-page.mui-transitioning {
+	-webkit-transition: -webkit-transform 300ms ease;
+	transition: transform 300ms ease;
+}
+.mui-page-left {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+.mui-ios .mui-page-left {
+	-webkit-transform: translate3d(-20%, 0, 0);
+	transform: translate3d(-20%, 0, 0);
+}
+.mui-navbar {
+	position: fixed;
+	right: 0;
+	left: 0;
+	z-index: 10;
+	height: 44px;
+	background-color: #f7f7f8;
+}
+.mui-navbar .mui-bar {
+	position: absolute;
+	background: transparent;
+	text-align: center;
+}
+.mui-android .mui-navbar-inner.mui-navbar-left {
+	opacity: 0;
+}
+.mui-ios .mui-navbar-left .mui-left,
+.mui-ios .mui-navbar-left .mui-center,
+.mui-ios .mui-navbar-left .mui-right {
+	opacity: 0;
+}
+.mui-navbar .mui-btn-nav {
+	-webkit-transition: none;
+	transition: none;
+	-webkit-transition-duration: .0s;
+	transition-duration: .0s;
+}
+.mui-navbar .mui-bar .mui-title {
+	display: inline-block;
+	width: auto;
+}
+.mui-page-shadow {
+	position: absolute;
+	right: 100%;
+	top: 0;
+	width: 16px;
+	height: 100%;
+	z-index: -1;
+	content: '';
+}
+.mui-page-shadow {
+	background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+	background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+}
+.mui-navbar-inner.mui-transitioning,
+.mui-navbar-inner .mui-transitioning {
+	-webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+	transition: opacity 300ms ease, transform 300ms ease;
+}
+.mui-page {
+	display: none;
+}
+.mui-pages .mui-page {
+	display: block;
+}
+.mui-page .mui-table-view:first-child {
+	margin-top: 15px;
+}
+.mui-page .mui-table-view:last-child {
+	margin-bottom: 30px;
+}
+.mui-table-view {
+	margin-top: 20px;
+}
+
+.mui-table-view span.mui-pull-right {
+	color: #999;
+}
+/*----- 单页面  ------(end)*/
+
+/*----- 列表页面  ------(start)*/
+
+input.search {
+    height: 36px;
+    width: 95%;
+    font-size: 15px;
+    margin: 5px 5px -2px 5px;
+}
+button.search{
+	height: 36px;
+    font-size: 15px;
+    margin: 5px 8px -2px 10px;
+}
+
+/*------下拉刷新与上拉刷新样式-----(start)*/	
+.mui-pull-top-tips {
+	position: absolute;
+	top: -20px;
+	left: 50%;
+	margin-left: -25px;
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+	z-index: 2;
+}
+.mui-bar~.mui-pull-top-tips {
+	top: 24px;
+}
+.mui-pull-top-wrapper {
+	width: 42px;
+	height: 42px;
+	display: block;
+	text-align: center;
+	background-color: #efeff4;
+	border: 1px solid #ddd;
+	border-radius: 25px;
+	background-clip: padding-box;
+	box-shadow: 0 4px 10px #bbb;
+	overflow: hidden;
+}
+.mui-pull-top-tips.mui-transitioning {
+	-webkit-transition-duration: 200ms;
+	transition-duration: 200ms;
+}
+.mui-pull-top-tips .mui-pull-loading {
+	margin: 0;
+}
+.mui-pull-top-wrapper .mui-icon,
+.mui-pull-top-wrapper .mui-spinner {
+	margin-top: 7px;
+}
+.mui-pull-bottom-tips {
+	text-align: center;
+	background-color: #efeff4;
+	font-size: 15px;
+	line-height: 40px;
+	color: #777;
+}
+.mui-pull-top-canvas {
+	overflow: hidden;
+	background-color: #fafafa;
+	border-radius: 40px;
+	box-shadow: 0 4px 10px #bbb;
+	width: 40px;
+	height: 40px;
+	margin: 0 auto;
+}
+.mui-pull-top-canvas canvas {
+	width: 40px;
+}
+.mui-slider-indicator.mui-segmented-control {
+	background-color: #efeff4;
+}
+.mui-control-content {
+	background-color: white;
+	min-height: 215px;
+	height: auto;
+}
+.mui-control-content .mui-loading {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+/*------下拉刷新与上拉刷新样式-----(end)*/		
+
+.mui-table h4,.mui-table h5,.mui-table .mui-h5,.mui-table .mui-h6,.mui-table p{
+    margin-top: 0;
+}
+.mui-table h4{
+    line-height: 21px;
+    font-weight: 500;
+}
+.mui-table-view .mui-media-object {
+    line-height: 18px;
+    max-width: 18px;
+    height: 18px;
+}
+
+.time {
+    line-height: 16px;
+    font-size: 14px;
+    color: gray;
+}
+
+.my-card {
+    font-size: 14px;
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0;
+    border-radius: 2px;
+    background-color: #fff;
+    background-clip: padding-box;
+    box-shadow: 0 1px 2px rgba(0,0,0,.3);
+}
+			
+			
+			
+/*----- 列表页面  ------(end)*/
+
+
+/*----- 详情页面  ------(start)*/
+.mui-input-group .mui-input-row {
+    position: relative;
+    clear: left;
+    overflow: hidden;
+	min-height: 40px;
+	height: auto;
+}
+.mui-input-row label.left {
+	float: left;
+    width: 45%;
+    color: grey;
+}
+.mui-input-row label.right {
+    font-family: 'Helvetica Neue',Helvetica,sans-serif;
+    line-height: 1.1;
+    min-height: 40px;
+    float: right;
+    width: 55%;
+    text-align: right !important;
+    padding: 10px 10px;
+}
+
+/*----- 详情页面  ------(end)*/
+
+/*潮汐图表*/
+.tide-chart {
+    height: 200px;
+    margin: 0px;
+    padding: 0px;
+}
+/* 天气 */
+.my-card-content {
+    font-size: 14px;
+    position: relative;
+    padding: 10px;
+}
+
+/*作业调度页面单独的css*/
+.input-date{
+	width: 60%;
+	margin-left: 20%;
+}
+#queryDate{
+	font-size: .9rem;
+	padding-top:5px;
+}
+.mui-table-view-cell.mui-collapse .mui-table-view .ysy-padding-li{
+	padding-left: 15px;
+}
+.mui-table-view-cell.mui-collapse .mui-table-view{
+	margin-top: 0;
+}
+/*作业调度页面单独的css end*/
+
+
+/*系统消息红色圆点*/
+.radiusNew{
+    display: inline-block;
+    background-color: red;
+    color: white;
+    text-align: center;
+    padding:5px;
+    border-radius:50%
+}
+
+.chooseDate{
+	padding: 10px 0
+}
+
+/*个人工作量页面单独的css*/
+.ysy-label{
+	left: 40%;
+	right: 40%;
+}
+/*个人工作量页面单独的css end*/
+
+/* 我的   start*/
+.head {
+	height: 40px;
+}
+#head {
+	line-height: 40px;
+}
+.head-img {
+	line-height: 40px;
+    max-width: 40px;
+    height: 40px;
+	width: 40px;
+	margin: 0 5px;
+}
+#head-img1 {
+	position: absolute;
+	bottom: 10px;
+	right: 40px;
+	width: 40px;
+	height: 40px;
+}
+.update {
+	font-style: normal;
+	color: #999999;
+	margin-right: -25px;
+	font-size: 15px
+}
+/*.mui-fullscreen {
+	position: fixed;
+	z-index: 20;
+	background-color: #000;
+}*/
+/* 我的  end*/
